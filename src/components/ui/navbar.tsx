@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, User, Trophy } from "lucide-react";
+import { Menu, Trophy } from "lucide-react";
 import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
@@ -37,9 +37,6 @@ export default function Navbar() {
               <Link href="/dream-team" className="text-gray-300 hover:text-white px-3 py-2">
                 Dream Team
               </Link>
-              <Link href="/about" className="text-gray-300 hover:text-white px-3 py-2">
-                About
-              </Link>
               <Link href="/schedule" className="text-gray-300 hover:text-white px-3 py-2">
                 Schedule
               </Link>
@@ -49,8 +46,8 @@ export default function Navbar() {
               <Link href="/team-analysis" className="text-gray-300 hover:text-white px-3 py-2">
                 Team Analysis
               </Link>
-              <Link href="/profile" className="text-gray-300 hover:text-white px-3 py-2">
-                Profile
+              <Link href="/about" className="text-gray-300 hover:text-white px-3 py-2">
+                About
               </Link>
             </SignedIn>
           </div>
@@ -154,13 +151,7 @@ export default function Navbar() {
               >
                 Dream Team
               </Link>
-              <Link 
-                href="/about"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800"
-                onClick={closeMenu}
-              >
-                About
-              </Link>
+              
               <Link 
                 href="/schedule"
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800"
@@ -183,12 +174,11 @@ export default function Navbar() {
                 Team Analysis
               </Link>
               <Link 
-                href="/profile"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 flex items-center"
+                href="/about"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800"
                 onClick={closeMenu}
               >
-                <User className="h-4 w-4 mr-2" />
-                Profile
+                About
               </Link>
             </SignedIn>
             
