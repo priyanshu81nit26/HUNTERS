@@ -2,16 +2,21 @@ import { authMiddleware } from "@clerk/nextjs";
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your middleware
+// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
-  publicRoutes: ["/", "/about"],
-  ignoredRoutes: ["/api/webhooks/user"],
-  // Add support for custom routing
-  afterAuth(auth, req, evt) {
-    // Handle routing for profile pages
-  }
+  publicRoutes: [
+    "/",
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/about",
+    "/api/webhook",
+    "/bet-help"
+  ],
+  ignoredRoutes: [
+    "/((?!api|trpc))(_next|.+\\..+)(.*)",
+  ],
 });
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/(api|trpc)(.*)"],
 }; 

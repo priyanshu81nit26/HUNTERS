@@ -14,7 +14,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center"> 
+    <main className="flex flex-col items-center mt-14"> 
       {/* First Segment - Hero Section */}
       <section className="relative w-full h-screen">
         {/* Background cricket player image */}
@@ -46,12 +46,12 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4">
             {isClient ? (
               <>
-                <Link href="/signup">
+                <Link href="/sign-up">
                   <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
                     Get Started <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href="/sign-in">
                   <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
                     Sign In
                   </Button>
@@ -165,7 +165,7 @@ export default function Home() {
             </div>
             <div className="w-full md:w-1/2 h-[300px] md:h-[400px] overflow-hidden rounded-lg">
               <div className="relative w-full h-full">
-          <Image
+                <Image
                   src="/dhoni.jpg"
                   alt="Cricket player"
                   fill
@@ -186,7 +186,7 @@ export default function Home() {
           <div className="flex flex-col-reverse md:flex-row items-center gap-10">
             <div className="w-full md:w-1/2 h-[300px] md:h-[400px] overflow-hidden rounded-lg">
               <div className="relative w-full h-full">
-          <Image
+                <Image
                   src="/dhoni.jpg"
                   alt="Cricket player"
                   fill
@@ -246,12 +246,12 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             {isClient ? (
               <>
-                <Link href="/signup">
+                <Link href="/sign-up">
                   <Button size="lg" className="bg-white text-yellow-600 hover:bg-gray-100">
                     Sign Up Now
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href="/sign-in">
                   <Button size="lg" variant="outline" className="border-white text-white hover:bg-yellow-600">
                     Sign In
                   </Button>

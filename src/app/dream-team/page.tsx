@@ -14,18 +14,7 @@ import {
   CardDescription
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Mock data for IPL teams
-const IPL_TEAMS = [
-  { id: 1, name: "Chennai Super Kings", short: "CSK", color: "yellow" },
-  { id: 2, name: "Mumbai Indians", short: "MI", color: "blue" },
-  { id: 3, name: "Royal Challengers Bangalore", short: "RCB", color: "red" },
-  { id: 4, name: "Kolkata Knight Riders", short: "KKR", color: "purple" },
-  { id: 5, name: "Delhi Capitals", short: "DC", color: "blue" },
-  { id: 6, name: "Punjab Kings", short: "PBKS", color: "red" },
-  { id: 7, name: "Rajasthan Royals", short: "RR", color: "pink" },
-  { id: 8, name: "Sunrisers Hyderabad", short: "SRH", color: "orange" },
-];
+import { TEAMS, GROUNDS } from "../schedule/page";
 
 // Player interface
 interface Player {
@@ -47,15 +36,49 @@ interface Player {
   isViceCaptainPick: boolean;
 }
 
+// Generate today's match data
+const getTodayMatch = () => {
+  const today = new Date();
+  
+  // Get team indices for today's match based on the date
+  const dayOfMonth = today.getDate();
+  const team1Index = dayOfMonth % TEAMS.length;
+  const team2Index = (team1Index + 1) % TEAMS.length;
+  
+  // Get ground for the match
+  const groundIndex = team1Index % GROUNDS.length;
+  
+  return {
+    team1: TEAMS[team1Index],
+    team2: TEAMS[team2Index],
+    date: today,
+    time: "7:30 PM IST",
+    venue: GROUNDS[groundIndex].name,
+    city: GROUNDS[groundIndex].city
+  };
+};
+
 export default function DreamTeamPage() {
-  const [selectedTeam, setSelectedTeam] = useState(IPL_TEAMS[0]);
-  const [opponent, setOpponent] = useState(IPL_TEAMS[1]);
+  const [todayMatch, setTodayMatch] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dreamTeam, setDreamTeam] = useState<Player[]>([]);
+  const [organizedTeam, setOrganizedTeam] = useState<{
+    batsmen: Player[],
+    allRounders: Player[],
+    bowlers: Player[]
+  }>({
+    batsmen: [],
+    allRounders: [],
+    bowlers: []
+  });
 
-  // Fetch player data when team or opponent changes
+  // Fetch player data and today's match on component mount
   useEffect(() => {
     setIsLoading(true);
+    
+    // Get today's match
+    const matchData = getTodayMatch();
+    setTodayMatch(matchData);
     
     // Simulating API fetch delay
     const fetchTimer = setTimeout(() => {
@@ -97,43 +120,6 @@ export default function DreamTeamPage() {
           isViceCaptainPick: true,
           isCaptainPick: false
         },
-        // Add more players as needed
-        {
-          id: 3,
-          name: "Jasprit Bumrah",
-          team: "MI",
-          role: "Bowler",
-          battingHand: "Right-handed",
-          bowlingStyle: "Right-arm fast",
-          imageUrl: "/dhoni.jpg",
-          stats: {
-            battingAvg: "6.2",
-            strikeRate: "88.5",
-            bowlingAvg: "23.8",
-            economy: "7.4"
-          },
-          pickedByUsers: 980000,
-          isCaptainPick: false,
-          isViceCaptainPick: false
-        },
-        {
-          id: 4,
-          name: "Ravindra Jadeja",
-          team: "CSK",
-          role: "All-rounder",
-          battingHand: "Left-handed",
-          bowlingStyle: "Left-arm orthodox",
-          imageUrl: "/dhoni.jpg",
-          stats: {
-            battingAvg: "26.1",
-            strikeRate: "127.6",
-            bowlingAvg: "28.2",
-            economy: "7.6"
-          },
-          pickedByUsers: 870000,
-          isCaptainPick: false,
-          isViceCaptainPick: false
-        },
         {
           id: 5,
           name: "Rohit Sharma",
@@ -171,42 +157,6 @@ export default function DreamTeamPage() {
           isViceCaptainPick: false
         },
         {
-          id: 7,
-          name: "Hardik Pandya",
-          team: "MI",
-          role: "All-rounder",
-          battingHand: "Right-handed",
-          bowlingStyle: "Right-arm medium-fast",
-          imageUrl: "/dhoni.jpg",
-          stats: {
-            battingAvg: "28.7",
-            strikeRate: "147.3",
-            bowlingAvg: "31.2",
-            economy: "8.9"
-          },
-          pickedByUsers: 920000,
-          isCaptainPick: false,
-          isViceCaptainPick: false
-        },
-        {
-          id: 8,
-          name: "Rashid Khan",
-          team: "SRH",
-          role: "Bowler",
-          battingHand: "Right-handed",
-          bowlingStyle: "Right-arm leg break",
-          imageUrl: "/dhoni.jpg",
-          stats: {
-            battingAvg: "12.8",
-            strikeRate: "152.6",
-            bowlingAvg: "21.7",
-            economy: "6.3"
-          },
-          pickedByUsers: 850000,
-          isCaptainPick: false,
-          isViceCaptainPick: false
-        },
-        {
           id: 9,
           name: "Rishabh Pant",
           team: "DC",
@@ -225,6 +175,42 @@ export default function DreamTeamPage() {
           isViceCaptainPick: false
         },
         {
+          id: 4,
+          name: "Ravindra Jadeja",
+          team: "CSK",
+          role: "All-rounder",
+          battingHand: "Left-handed",
+          bowlingStyle: "Left-arm orthodox",
+          imageUrl: "/dhoni.jpg",
+          stats: {
+            battingAvg: "26.1",
+            strikeRate: "127.6",
+            bowlingAvg: "28.2",
+            economy: "7.6"
+          },
+          pickedByUsers: 870000,
+          isCaptainPick: false,
+          isViceCaptainPick: false
+        },
+        {
+          id: 7,
+          name: "Hardik Pandya",
+          team: "MI",
+          role: "All-rounder",
+          battingHand: "Right-handed",
+          bowlingStyle: "Right-arm medium-fast",
+          imageUrl: "/dhoni.jpg",
+          stats: {
+            battingAvg: "28.7",
+            strikeRate: "147.3",
+            bowlingAvg: "31.2",
+            economy: "8.9"
+          },
+          pickedByUsers: 920000,
+          isCaptainPick: false,
+          isViceCaptainPick: false
+        },
+        {
           id: 10,
           name: "Andre Russell",
           team: "KKR",
@@ -239,6 +225,42 @@ export default function DreamTeamPage() {
             economy: "9.1"
           },
           pickedByUsers: 880000,
+          isCaptainPick: false,
+          isViceCaptainPick: false
+        },
+        {
+          id: 3,
+          name: "Jasprit Bumrah",
+          team: "MI",
+          role: "Bowler",
+          battingHand: "Right-handed",
+          bowlingStyle: "Right-arm fast",
+          imageUrl: "/dhoni.jpg",
+          stats: {
+            battingAvg: "6.2",
+            strikeRate: "88.5",
+            bowlingAvg: "23.8",
+            economy: "7.4"
+          },
+          pickedByUsers: 980000,
+          isCaptainPick: false,
+          isViceCaptainPick: false
+        },
+        {
+          id: 8,
+          name: "Rashid Khan",
+          team: "SRH",
+          role: "Bowler",
+          battingHand: "Right-handed",
+          bowlingStyle: "Right-arm leg break",
+          imageUrl: "/dhoni.jpg",
+          stats: {
+            battingAvg: "12.8",
+            strikeRate: "152.6",
+            bowlingAvg: "21.7",
+            economy: "6.3"
+          },
+          pickedByUsers: 850000,
           isCaptainPick: false,
           isViceCaptainPick: false
         },
@@ -263,24 +285,31 @@ export default function DreamTeamPage() {
       ];
       
       setDreamTeam(mockDreamTeam);
+      
+      // Organize players by role
+      const batsmen = mockDreamTeam.filter(player => 
+        player.role === "Batsman" || player.role === "Wicket-keeper"
+      );
+      
+      const allRounders = mockDreamTeam.filter(player => 
+        player.role === "All-rounder"
+      );
+      
+      const bowlers = mockDreamTeam.filter(player => 
+        player.role === "Bowler"
+      );
+      
+      setOrganizedTeam({
+        batsmen,
+        allRounders,
+        bowlers
+      });
+      
       setIsLoading(false);
     }, 1500); // 1.5 seconds delay to simulate loading
     
     return () => clearTimeout(fetchTimer);
-  }, [selectedTeam, opponent]);
-  
-  const handleTeamChange = (team: typeof IPL_TEAMS[0]) => {
-    setSelectedTeam(team);
-    if (team.id === opponent.id) {
-      // If same team selected, switch opponent to avoid duplicate
-      const newOpponent = IPL_TEAMS.find(t => t.id !== team.id) || IPL_TEAMS[1];
-      setOpponent(newOpponent);
-    }
-  };
-  
-  const handleOpponentChange = (team: typeof IPL_TEAMS[0]) => {
-    setOpponent(team);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -294,104 +323,58 @@ export default function DreamTeamPage() {
               <CardHeader>
                 <CardTitle>Team Dashboard</CardTitle>
                 <CardDescription>
-                  Select your team and opponent to get player recommendations
+                  Dream team based on today&apos;s match
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Team Selector - Direct Selection */}
-                <div className="space-y-1">
-                  <label className="text-sm font-medium">Your Team</label>
-                  <div className="relative">
-                    <select 
-                      className="w-full h-10 pl-3 pr-10 py-2 border rounded-md appearance-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                      value={selectedTeam.id}
-                      onChange={(e) => {
-                        const team = IPL_TEAMS.find(t => t.id === parseInt(e.target.value));
-                        if (team) handleTeamChange(team);
-                      }}
-                    >
-                      {IPL_TEAMS.map((team) => (
-                        <option key={team.id} value={team.id}>
-                          {team.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                      <ChevronsUpDown className="h-4 w-4 text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Opponent Selector - Direct Selection */}
-                <div className="space-y-1">
-                  <label className="text-sm font-medium">Opponent Team</label>
-                  <div className="relative">
-                    <select 
-                      className="w-full h-10 pl-3 pr-10 py-2 border rounded-md appearance-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                      value={opponent.id}
-                      onChange={(e) => {
-                        const team = IPL_TEAMS.find(t => t.id === parseInt(e.target.value));
-                        if (team) handleOpponentChange(team);
-                      }}
-                    >
-                      {IPL_TEAMS.filter(team => team.id !== selectedTeam.id).map((team) => (
-                        <option key={team.id} value={team.id}>
-                          {team.name}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                      <ChevronsUpDown className="h-4 w-4 text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Upcoming Match Information */}
+                {/* Today's Match Information */}
                 <div className="mt-6">
-                  <h3 className="text-md font-semibold mb-3">Upcoming Match</h3>
+                  <h3 className="text-md font-semibold mb-3">Today&apos;s Match</h3>
                   
-                  <div className="p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                          <Image
-                            src="/dhoni.jpg"
-                            alt={selectedTeam.name}
-                            fill
-                            className="object-cover"
-                          />
+                  {todayMatch && (
+                    <div className="p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <div className="relative h-10 w-10 rounded-full overflow-hidden">
+                            <Image
+                              src={todayMatch.team1.image}
+                              alt={todayMatch.team1.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <span className="font-medium text-lg">vs</span>
+                          <div className="relative h-10 w-10 rounded-full overflow-hidden">
+                            <Image
+                              src={todayMatch.team2.image}
+                              alt={todayMatch.team2.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
                         </div>
-                        <span className="font-medium text-lg">vs</span>
-                        <div className="relative h-10 w-10 rounded-full overflow-hidden">
-                          <Image
-                            src="/dhoni.jpg"
-                            alt={opponent.name}
-                            fill
-                            className="object-cover"
-                          />
+                      </div>
+                      
+                      <div className="text-sm">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-gray-500">Date:</span>
+                          <span className="font-medium">
+                            {todayMatch.date.toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-gray-500">Time:</span>
+                          <span className="font-medium">{todayMatch.time}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-500">Venue:</span>
+                          <span className="font-medium">
+                            {todayMatch.venue}, {todayMatch.city}
+                          </span>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="text-sm">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-gray-500">Date:</span>
-                        <span className="font-medium">21/3/2025</span>
-                      </div>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-gray-500">Time:</span>
-                        <span className="font-medium">7:30 PM IST</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Venue:</span>
-                        <span className="font-medium">
-                          {selectedTeam.short === "CSK" ? "Chepauk Stadium" : 
-                           selectedTeam.short === "MI" ? "Wankhede Stadium" : 
-                           "Narendra Modi Stadium"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                   
                   <div className="mt-4">
                     <div className="flex items-center mb-2">
@@ -468,13 +451,13 @@ export default function DreamTeamPage() {
                   Dream Team XI
                 </CardTitle>
                 <CardDescription>
-                  The optimal 11 players based on performance analytics
+                  The optimal 11 players based on performance analytics for today&apos;s match
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {isLoading ? (
-                    Array.from({ length: 11 }).map((_, i) => (
+                {isLoading ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {Array.from({ length: 11 }).map((_, i) => (
                       <div key={i} className="animate-pulse flex space-x-4">
                         <div className="rounded-full bg-slate-200 h-12 w-12"></div>
                         <div className="flex-1 space-y-3 py-1">
@@ -487,49 +470,53 @@ export default function DreamTeamPage() {
                           </div>
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    dreamTeam.map((player) => (
-                      <div
-                        key={player.id}
-                        className={`flex flex-col p-4 bg-white rounded-lg border shadow-sm ${
-                          player.isCaptainPick 
-                            ? "border-yellow-400 ring-2 ring-yellow-200" 
-                            : player.isViceCaptainPick
-                            ? "border-blue-400 ring-2 ring-blue-200"
-                            : "border-gray-200"
-                        }`}
-                      >
-                        <div className="flex items-center mb-3">
-                          <div className="relative h-14 w-14 mr-3 rounded-full overflow-hidden">
-                            <Image
-                              src={player.imageUrl}
-                              alt={player.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="text-sm font-medium flex items-center">
-                              {player.name}
-                              {player.isCaptainPick && (
-                                <Badge className="ml-2 bg-yellow-100 text-yellow-800">Captain</Badge>
-                              )}
-                              {player.isViceCaptainPick && (
-                                <Badge className="ml-2 bg-blue-100 text-blue-800">Vice Captain</Badge>
-                              )}
-                            </h4>
-                            <div className="flex items-center space-x-1 text-xs text-gray-500">
-                              <span>{player.team}</span>
-                              <span>•</span>
-                              <span>{player.role}</span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {/* Batsmen Section */}
+                    <div>
+                      <h3 className="text-lg font-medium mb-3 text-blue-600">Batsmen</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {organizedTeam.batsmen.map((player) => (
+                          <div
+                            key={player.id}
+                            className={`flex flex-col p-4 bg-white rounded-lg border shadow-sm ${
+                              player.isCaptainPick 
+                                ? "border-yellow-400 ring-2 ring-yellow-200" 
+                                : player.isViceCaptainPick
+                                ? "border-blue-400 ring-2 ring-blue-200"
+                                : "border-gray-200"
+                            }`}
+                          >
+                            <div className="flex items-center mb-3">
+                              <div className="relative h-14 w-14 mr-3 rounded-full overflow-hidden">
+                                <Image
+                                  src={player.imageUrl}
+                                  alt={player.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium flex items-center">
+                                  {player.name}
+                                  {player.isCaptainPick && (
+                                    <Badge className="ml-2 bg-yellow-100 text-yellow-800">Captain</Badge>
+                                  )}
+                                  {player.isViceCaptainPick && (
+                                    <Badge className="ml-2 bg-blue-100 text-blue-800">Vice Captain</Badge>
+                                  )}
+                                </h4>
+                                <div className="flex items-center space-x-1 text-xs text-gray-500">
+                                  <span>{player.team}</span>
+                                  <span>•</span>
+                                  <span>{player.role}</span>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          {player.role !== "Bowler" && (
-                            <>
+                            
+                            <div className="grid grid-cols-2 gap-2 text-xs">
                               <div className="flex justify-between">
                                 <span className="text-gray-500">Bat Avg</span>
                                 <span className="font-medium">{player.stats.battingAvg}</span>
@@ -538,11 +525,70 @@ export default function DreamTeamPage() {
                                 <span className="text-gray-500">SR</span>
                                 <span className="font-medium">{player.stats.strikeRate}</span>
                               </div>
-                            </>
-                          )}
-                          
-                          {player.role !== "Batsman" && (
-                            <>
+                            </div>
+                            
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500">Picked by</span>
+                                <span className="text-xs font-medium">{player.pickedByUsers.toLocaleString()} users</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* All-Rounders Section */}
+                    <div>
+                      <h3 className="text-lg font-medium mb-3 text-green-600">All-Rounders</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {organizedTeam.allRounders.map((player) => (
+                          <div
+                            key={player.id}
+                            className={`flex flex-col p-4 bg-white rounded-lg border shadow-sm ${
+                              player.isCaptainPick 
+                                ? "border-yellow-400 ring-2 ring-yellow-200" 
+                                : player.isViceCaptainPick
+                                ? "border-blue-400 ring-2 ring-blue-200"
+                                : "border-gray-200"
+                            }`}
+                          >
+                            <div className="flex items-center mb-3">
+                              <div className="relative h-14 w-14 mr-3 rounded-full overflow-hidden">
+                                <Image
+                                  src={player.imageUrl}
+                                  alt={player.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium flex items-center">
+                                  {player.name}
+                                  {player.isCaptainPick && (
+                                    <Badge className="ml-2 bg-yellow-100 text-yellow-800">Captain</Badge>
+                                  )}
+                                  {player.isViceCaptainPick && (
+                                    <Badge className="ml-2 bg-blue-100 text-blue-800">Vice Captain</Badge>
+                                  )}
+                                </h4>
+                                <div className="flex items-center space-x-1 text-xs text-gray-500">
+                                  <span>{player.team}</span>
+                                  <span>•</span>
+                                  <span>{player.role}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Bat Avg</span>
+                                <span className="font-medium">{player.stats.battingAvg}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">SR</span>
+                                <span className="font-medium">{player.stats.strikeRate}</span>
+                              </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-500">Bowl Avg</span>
                                 <span className="font-medium">{player.stats.bowlingAvg}</span>
@@ -551,20 +597,84 @@ export default function DreamTeamPage() {
                                 <span className="text-gray-500">Econ</span>
                                 <span className="font-medium">{player.stats.economy}</span>
                               </div>
-                            </>
-                          )}
-                        </div>
-                        
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-500">Picked by</span>
-                            <span className="text-xs font-medium">{player.pickedByUsers.toLocaleString()} users</span>
+                            </div>
+                            
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500">Picked by</span>
+                                <span className="text-xs font-medium">{player.pickedByUsers.toLocaleString()} users</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))
-                  )}
-                </div>
+                    </div>
+                    
+                    {/* Bowlers Section */}
+                    <div>
+                      <h3 className="text-lg font-medium mb-3 text-red-600">Bowlers</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {organizedTeam.bowlers.map((player) => (
+                          <div
+                            key={player.id}
+                            className={`flex flex-col p-4 bg-white rounded-lg border shadow-sm ${
+                              player.isCaptainPick 
+                                ? "border-yellow-400 ring-2 ring-yellow-200" 
+                                : player.isViceCaptainPick
+                                ? "border-blue-400 ring-2 ring-blue-200"
+                                : "border-gray-200"
+                            }`}
+                          >
+                            <div className="flex items-center mb-3">
+                              <div className="relative h-14 w-14 mr-3 rounded-full overflow-hidden">
+                                <Image
+                                  src={player.imageUrl}
+                                  alt={player.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="text-sm font-medium flex items-center">
+                                  {player.name}
+                                  {player.isCaptainPick && (
+                                    <Badge className="ml-2 bg-yellow-100 text-yellow-800">Captain</Badge>
+                                  )}
+                                  {player.isViceCaptainPick && (
+                                    <Badge className="ml-2 bg-blue-100 text-blue-800">Vice Captain</Badge>
+                                  )}
+                                </h4>
+                                <div className="flex items-center space-x-1 text-xs text-gray-500">
+                                  <span>{player.team}</span>
+                                  <span>•</span>
+                                  <span>{player.role}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Bowl Avg</span>
+                                <span className="font-medium">{player.stats.bowlingAvg}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-500">Econ</span>
+                                <span className="font-medium">{player.stats.economy}</span>
+                              </div>
+                            </div>
+                            
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500">Picked by</span>
+                                <span className="text-xs font-medium">{player.pickedByUsers.toLocaleString()} users</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
