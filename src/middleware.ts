@@ -1,37 +1,17 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { authMiddleware } from "@clerk/nextjs";
 
-// These routes are public and can be accessed without authentication
-const publicRoutes = ['/', '/about', '/login', '/signup']
-
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const token = request.cookies.get('dreamteam-auth')?.value
-
-  // Check if the route requires authentication (not in public routes)
-  const isProtectedRoute = !publicRoutes.some(route => 
-    pathname === route || pathname.startsWith(`${route}/`)
-  )
-
-  // If trying to access protected route without auth, redirect to login
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/login', request.url))
+// This example protects all routes including api/trpc routes
+// Please edit this to allow other routes to be public as needed.
+// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your middleware
+export default authMiddleware({
+  publicRoutes: ["/", "/about"],
+  ignoredRoutes: ["/api/webhooks/user"],
+  // Add support for custom routing
+  afterAuth(auth, req, evt) {
+    // Handle routing for profile pages
   }
+});
 
-  return NextResponse.next()
-}
-
-// Configure which routes use this middleware
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images/* (image files in public)
-     * - public/* (other static files)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|images|public).*)',
-  ],
-} 
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+}; 
