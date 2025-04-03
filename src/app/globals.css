@@ -118,6 +118,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    padding-top: 4rem; /* Add padding to account for fixed navbar */
+    padding-top: 0; /* Remove top padding */
   }
 }

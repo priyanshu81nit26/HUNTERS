@@ -8,13 +8,16 @@ import { ArrowRight, Trophy, BarChart3, Zap } from "lucide-react";
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
+  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
     setIsClient(true);
+    // Format date consistently on client side to avoid hydration mismatch
+    setCurrentDate(new Date().toISOString());
   }, []);
 
   return (
-    <main className="flex flex-col items-center mt-14"> 
+    <main className="flex flex-col items-center pt-0 mt-0"> 
       {/* First Segment - Hero Section */}
       <section className="relative w-full h-screen">
         {/* Background cricket player image */}
