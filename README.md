@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IPL Dream Team Analytics
+
+A comprehensive IPL cricket analytics application featuring:
+- Match Analysis
+- Team Comparison
+- Player Statistics
+- Dream Team Builder
+- Schedule Viewer
+- Ground Analysis
+- Betting Assistance
+
+## Updated on April 3, 2025
+
+This project provides cricket fans with AI-powered insights for IPL matches, helping them build optimal fantasy teams and analyze match statistics.
+
+## Features
+- Real-time match analysis with ball-by-ball tracking
+- Predictive algorithms for player performance
+- Head-to-head team comparisons
+- Historical data visualization
+- Fantasy team builder with ML recommendations
+- Ground and pitch analysis
+
+## Tech Stack
+- Next.js
+- TypeScript
+- Tailwind CSS
+- Clerk Authentication
+- Shadcn UI Components
 
 ## Getting Started
 
