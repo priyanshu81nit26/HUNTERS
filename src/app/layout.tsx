@@ -9,8 +9,10 @@ import { ThemeProvider } from "@/providers/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Dream Team - Fantasy Cricket Analytics",
-  description: "Build your perfect cricket team with advanced analytics",
+  title: "IPL Dream Team 2025 - Fantasy Cricket Analytics",
+  description: "Build your perfect IPL 2025 cricket team with advanced analytics and match insights",
+  authors: [{ name: "IPL Analytics Team" }],
+  keywords: ["IPL", "cricket", "fantasy", "dream team", "analytics", "match analysis"],
 };
 
 export default function RootLayout({
