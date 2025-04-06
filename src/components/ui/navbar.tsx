@@ -52,7 +52,7 @@ export default function Navbar() {
                 Team Analysis
               </Link>
               <Link href="/bet-help" className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm">
-                Bet Helper
+                GetInsights
               </Link>
               <Link href="/about" className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm">
                 About

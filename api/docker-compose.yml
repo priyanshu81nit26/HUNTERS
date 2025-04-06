@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  ipl-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./IPLStats3updcsv1.csv:/app/IPLStats3updcsv1.csv
+      - ./deliveries.csv:/app/deliveries.csv
+    restart: unless-stopped 
